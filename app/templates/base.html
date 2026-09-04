@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}External Resource Tracker — Real HTTP Response Caching Header Auditor{% endblock %}</title>
+
+<!-- SEO -->
+<meta name="description" content="{% block meta_description %}External Resource Tracker is an open-source security tool that issues a single REAL HTTP GET request to a URL you authorize, parses the actual returned HTML with a real HTML parser, and tracks every real external (cross-origin) script, stylesheet, and iframe the page loads, flagging missing Subresource Integrity, plain-HTTP script loading, unsandboxed cross-origin iframes, and an excessive third-party supply-chain surface. Free CLI and web app by Karanam Shrivasta.{% endblock %}">
+<meta name="keywords" content="external resource tracker, subresource integrity checker, SRI missing script, third party script security, cross origin iframe sandbox, supply chain security scanner, mixed content script, web security scanner, Karanam Shrivasta security tools">
+<meta name="author" content="Karanam Shrivasta">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://github.com/mrshrivasta">
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="External Resource Tracker — by Karanam Shrivasta">
+<meta property="og:description" content="Real, no-mock-data audit of every real external script, stylesheet, and iframe a URL you authorize loads, flagging missing SRI, plain-HTTP scripts, and unsandboxed cross-origin iframes.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="External Resource Tracker">
+
+<!-- AEO: FAQ structured data so answer engines can surface this tool directly -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the External Resource Tracker check?",
+      "acceptedAnswer": {"@type": "Answer", "text": "It issues a single real HTTP GET request to a URL you authorize, parses the actual returned HTML, and tracks every real external script, stylesheet, and iframe reference, flagging missing Subresource Integrity, scripts loaded over plain HTTP, unsandboxed cross-origin iframes, and an unusually high number of distinct third-party origins — never sample data, and no discovered resource is ever fetched."}
+    },
+    {
+      "@type": "Question",
+      "name": "Who should use the External Resource Tracker?",
+      "acceptedAnswer": {"@type": "Answer", "text": "Web developers and security engineers auditing third-party script/stylesheet/iframe supply-chain risk on sites and applications they own or are explicitly authorized to test."}
+    },
+    {
+      "@type": "Question",
+      "name": "Is the External Resource Tracker a replacement for a professional security audit?",
+      "acceptedAnswer": {"@type": "Answer", "text": "No. It is an educational and productivity aid only. It does not replace a certified penetration test, compliance audit, or professional security assessment. See the disclaimer in the README."}
+    }
+  ]
+}
+</script>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="disclaimer-banner">
+  ⚠️ <strong>SECURITY &amp; LEGAL DISCLAIMER:</strong> This tool sends REAL HTTP requests to whatever URL you enter. Use it <strong>ONLY</strong>
+  against URLs/systems you own or are explicitly, contractually authorized to test — testing third-party sites without permission may violate
+  computer-crime laws and terms of service. Provided <strong>"AS IS", WITHOUT WARRANTY OF ANY KIND</strong>. Not a substitute for a professional
+  security audit. The author, <strong>Karanam Shrivasta</strong>, accepts <strong>NO LIABILITY</strong> for any damage, data loss, downtime, legal
+  consequences, or misuse arising from this software. By using this tool you accept full responsibility for your actions. See the README for the
+  complete disclaimer.
+</div>
+
+{% if current_user.is_authenticated %}
+<nav class="navbar">
+  <div class="nav-brand">🔐 External Resource Tracker</div>
+  <div class="nav-links">
+    <a href="{{ url_for('dashboard.index') }}">Dashboard</a>
+    <a href="{{ url_for('logs.index') }}">Logs</a>
+    <a href="{{ url_for('alerts.index') }}">Alerts</a>
+    <a href="{{ url_for('incidents.index') }}">Incidents</a>
+    <a href="{{ url_for('analytics.index') }}">Analytics</a>
+    <a href="{{ url_for('reports.index') }}">Reports</a>
+    <a href="{{ url_for('settings.index') }}">Settings</a>
+    <a href="{{ url_for('auth.logout') }}">Logout ({{ current_user.username }})</a>
+  </div>
+</nav>
+{% endif %}
+
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="watermark-footer">
+  <p>
+    External Resource Tracker &copy; {{ 2026 }} — Developed by <strong>Karanam Shrivasta</strong>
+    &middot; <a href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>
+    &middot; <a href="{{ linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>
+  </p>
+  <p class="footer-disclaimer">For authorized security auditing and educational use only. No warranty. Use at your own risk.</p>
+</footer>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
